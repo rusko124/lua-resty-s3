@@ -389,7 +389,7 @@ function _M.get_resolver_url(url)
             return nil, "dns query failed for host '" .. host .. "' "
         end
 
-        local addr_full = "http://" .. addr
+        local addr_full = "https://" .. addr
         if rest then
             addr_full = addr_full .. rest
         end

@@ -80,7 +80,7 @@ function _M:head(key)
     --ngx.log(ngx.INFO, "headers [[[", cjson.encode(myheaders), "]]]")
 
     -- TODO: check authorization.
-    local url = "http://" .. self.host .. util.uri_encode(short_uri, false)
+    local url = "https://" .. self.host .. util.uri_encode(short_uri, false)
     local res, err, req_debug = util.http_head(url, myheaders, self.timeout)
     if not res then
         ngx.log(ngx.ERR, "fail request to aws s3 service: [", req_debug, "] err: ", err)
@@ -110,7 +110,7 @@ function _M:get(key)
     --ngx.log(ngx.INFO, "headers [[[", cjson.encode(myheaders), "]]]")
 
     -- TODO: check authorization.
-    local url = "http://" .. self.host .. util.uri_encode(short_uri, false)
+    local url = "https://" .. self.host .. util.uri_encode(short_uri, false)
     local res, err, req_debug = util.http_get(url, myheaders, self.timeout)
     if not res then
         ngx.log(ngx.ERR, "fail request to aws s3 service: [", req_debug, "] err: ", err)
@@ -140,7 +140,7 @@ function _M:put(key, value, headers)
     headers = headers or util.new_headers()
     local authorization = self.auth:authorization_v4("PUT", short_uri, headers, value)
 
-    local url = "http://" .. self.host .. util.uri_encode(short_uri, false)
+    local url = "https://" .. self.host .. util.uri_encode(short_uri, false)
     ngx.log(ngx.INFO, "----- url: ", url)
     -- TODO: check authorization.
     local res, err, req_debug = util.http_put(url, value, headers, self.timeout)
@@ -177,7 +177,7 @@ function _M:delete(key)
     --ngx.log(ngx.INFO, "headers [[[", cjson.encode(myheaders), "]]]")
 
     -- TODO: check authorization.
-    local url = "http://" .. self.host .. util.uri_encode(short_uri, false)
+    local url = "https://" .. self.host .. util.uri_encode(short_uri, false)
     local res, err, req_debug = util.http_del(url, myheaders, self.timeout)
     if not res then
         ngx.log(ngx.ERR, "fail request to aws s3 service: [ ", req_debug, " ] err: ", err)
@@ -202,9 +202,9 @@ function _M:deletes(keys, quiet)
         ngx.log(ngx.ERR, "args [keys] invalid!")
         return false, "args-invalid"
     end
-    local url = "http://" .. self.host .. '/?delete'
+    local url = "https://" .. self.host .. '/?delete'
     if self.add_bucket_to_uri then
-        url = "http://" .. self.host .. '/' .. self.aws_bucket .. '?delete'
+        url = "https://" .. self.host .. '/' .. self.aws_bucket .. '?delete'
     end
     local myheaders = util.new_headers()
     local Object = {}
@@ -251,7 +251,7 @@ function _M:list(prefix, delimiter, page_size, marker)
     prefix = prefix or ""
     local args = {prefix=prefix}
 
-    local url = "http://" .. self.host .. "/"
+    local url = "https://" .. self.host .. "/"
     if self.add_bucket_to_uri then
         url = url .. self.aws_bucket
     end
@@ -303,7 +303,7 @@ end
 -- http://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadInitiate.html
 function _M:start_multi_upload(key, myheaders)
     local short_uri = self:get_short_uri(key)
-    local url = "http://" .. self.host .. short_uri .. "?uploads"
+    local url = "https://" .. self.host .. short_uri .. "?uploads"
 
     myheaders = myheaders or util.new_headers()
     local authorization = self.auth:authorization_v4("POST", url, myheaders, nil)

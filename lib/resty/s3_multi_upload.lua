@@ -30,7 +30,7 @@ function _M:upload(part_number, value)
     local authorization = self.auth:authorization_v4("PUT", short_uri, myheaders, value)
     -- 默认该模块为上传失败。
     self.parts[part_number] = "error"
-    local url = "http://" .. self.host .. short_uri
+    local url = "https://" .. self.host .. short_uri
     ngx.log(ngx.INFO, "----- url: ", url)
     -- TODO: check authorization.
     local res, err, req_debug = util.http_put(url, value, myheaders, self.timeout)
@@ -77,7 +77,7 @@ function _M:complete()
     local myheaders = util.new_headers()
     local authorization = self.auth:authorization_v4("POST", short_uri, myheaders, body)
 
-    local url = "http://" .. self.host .. short_uri
+    local url = "https://" .. self.host .. short_uri
     ngx.log(ngx.INFO, "----- url: ", url)
     -- TODO: check authorization.
     local res, err, req_debug = util.http_post(url, body, myheaders, self.timeout)
@@ -106,7 +106,7 @@ function _M:abort()
     local myheaders = util.new_headers()
     local authorization = self.auth:authorization_v4("DELETE", short_uri, myheaders, body)
 
-    local url = "http://" .. self.host .. short_uri
+    local url = "https://" .. self.host .. short_uri
     ngx.log(ngx.INFO, "----- url: ", url)
     -- TODO: check authorization.
     local res, err, req_debug = util.http_del(url, myheaders, self.timeout)
